@@ -54,6 +54,7 @@ public class graindRailEditor : Editor {
                 Undo.RecordObject(gr, "remove path");
                 gr.path.RemoveAt(gr.editPathNum);
             }
+            EditorGUILayout.EndHorizontal();
         }
 
         
