@@ -4,10 +4,11 @@ using System.Collections.Generic;
 public class graindRail : MonoBehaviour {
 
     public int pathLength;
-    private List<Transform> path;
+    public List<Vector3> path;
+    public int editPathNum;
 
     
-    public Vector3 pathT;
+    //public Vector3 pathT;
 
 	// Use this for initialization
 	void Start () {
@@ -26,6 +27,18 @@ public class graindRail : MonoBehaviour {
 
     private void OnDrawGizmos()
     {
+
+        foreach(Vector3 pos in path)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(pos, 1);
+        }
+
+        for(int i = 0; i < path.Count-1; i++)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawLine(path[i], path[i + 1]);
+        }
 
     }
 }

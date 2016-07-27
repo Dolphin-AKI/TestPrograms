@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Collections;
+using System.Collections.Generic;
 
 [@CustomEditor (typeof(graindRail))]
+[CanEditMultipleObjects]
 public class graindRailEditor : Editor {
 
 	// Use this for initialization
@@ -19,13 +20,43 @@ public class graindRailEditor : Editor {
     {
         graindRail gr = target as graindRail;
 
-        EditorGUI.BeginChangeCheck();
-        Vector3 pos = Handles.PositionHandle(gr.pathT, Quaternion.identity);
+        
+        gr.path[gr.editPathNum] = Handles.PositionHandle(gr.path[gr.editPathNum], Quaternion.identity);
 
-        if (EditorGUI.EndChangeCheck()){
-            Undo.RecordObject(gr, "Move graindrail Path");
-            gr.pathT = pos;
-            gr.EditorUpdate();
-        }
+        
     }
+
+    private bool pathListFolding = false;
+    public override void OnInspectorGUI()
+    {
+        graindRail gr = target as graindRail;
+
+        gr.editPathNum = EditorGUILayout.IntField("edit", gr.editPathNum);
+
+        List<Vector3> path = gr.path;
+        int plen = path.Count;
+        
+        if (pathListFolding = EditorGUILayout.Foldout(pathListFolding, "Path"))
+        {
+            for(int i = 0; i < plen; i++)
+            {
+                path[i] = EditorGUILayout.Vector3Field(i.ToString(), path[i]);
+            }
+
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("ADD", GUILayout.Width(50f)))
+            {
+                Undo.RecordObject(gr, "add path");
+                gr.path.Add(Vector3.zero);
+            }
+            if (GUILayout.Button("Remove", GUILayout.Width(70f)))
+            {
+                Undo.RecordObject(gr, "remove path");
+                gr.path.RemoveAt(gr.editPathNum);
+            }
+        }
+
+        
+    }
+    
 }
