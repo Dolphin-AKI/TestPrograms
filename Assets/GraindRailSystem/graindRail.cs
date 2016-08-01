@@ -38,16 +38,24 @@ public class graindRail : MonoBehaviour {
                 towardNextPath = (path[i + 1] - path[i]).normalized;
             }
             
-            vertics[tr_i] = (Quaternion.FromToRotation(Vector3.zero, towardNextPath) * new Vector3(size / 1.414f, size / 1.414f, 0) + path[i]);
-            
-            vertics[tr_i + 1] = (Quaternion.FromToRotation(Vector3.zero, towardNextPath) * new Vector3(size / 1.414f, -size / 1.414f, 0) + path[i]);
-            
-            vertics[tr_i + 2] = (Quaternion.FromToRotation(Vector3.zero, towardNextPath) * new Vector3(-size / 1.414f, -size / 1.414f, 0) + path[i]);
-            
-            vertics[tr_i + 3] = (Quaternion.FromToRotation(Vector3.zero, towardNextPath) * new Vector3(-size / 1.414f, size / 1.414f, 0) + path[i]);
-            
+            vertics[tr_i] = new Vector3(size / 1.414f, size / 1.414f, 0);
+            Vector3 rotaxis = Vector3.Cross(vertics[tr_i], towardNextPath);
+            vertics[tr_i] = Quaternion.AngleAxis(-(90f - Vector3.Angle(vertics[tr_i],towardNextPath)), rotaxis) * vertics[tr_i]  + path[i];
 
-            if(i < path.Count - 1)
+            vertics[tr_i + 1] = new Vector3(size / 1.414f, -size / 1.414f, 0);
+            rotaxis = Vector3.Cross(vertics[tr_i + 1], towardNextPath);
+            vertics[tr_i + 1] = Quaternion.AngleAxis(-(90f - Vector3.Angle(vertics[tr_i+1], towardNextPath)), rotaxis) * vertics[tr_i + 1] + path[i];
+
+            vertics[tr_i + 2] = new Vector3(-size / 1.414f, -size / 1.414f, 0);
+            rotaxis = Vector3.Cross(vertics[tr_i + 2], towardNextPath);
+            vertics[tr_i + 2] = Quaternion.AngleAxis(-(90f -Vector3.Angle(vertics[tr_i+2], towardNextPath)), rotaxis) * vertics[tr_i + 2] + path[i];
+
+            vertics[tr_i + 3] = new Vector3(-size / 1.414f, size / 1.414f, 0);
+            rotaxis = Vector3.Cross(vertics[tr_i + 3], towardNextPath);
+            vertics[tr_i + 3] = Quaternion.AngleAxis(-(90f - Vector3.Angle(vertics[tr_i+3], towardNextPath)), rotaxis) * vertics[tr_i + 3] + path[i];
+
+
+            if (i < path.Count - 1)
             {
                 for (int j = 0; j < 3; j++)
                 {
