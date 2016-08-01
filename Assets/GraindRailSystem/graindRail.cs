@@ -39,19 +39,19 @@ public class graindRail : MonoBehaviour {
             }
             
             vertics[tr_i] = new Vector3(size / 1.414f, size / 1.414f, 0);
-            Vector3 rotaxis = Vector3.Cross(vertics[tr_i], towardNextPath);
+            Vector3 rotaxis = Vector3.Cross(vertics[tr_i], towardNextPath).normalized;
             vertics[tr_i] = Quaternion.AngleAxis(-(90f - Vector3.Angle(vertics[tr_i],towardNextPath)), rotaxis) * vertics[tr_i]  + path[i];
 
             vertics[tr_i + 1] = new Vector3(size / 1.414f, -size / 1.414f, 0);
-            rotaxis = Vector3.Cross(vertics[tr_i + 1], towardNextPath);
+            rotaxis = Vector3.Cross(vertics[tr_i + 1], towardNextPath).normalized;
             vertics[tr_i + 1] = Quaternion.AngleAxis(-(90f - Vector3.Angle(vertics[tr_i+1], towardNextPath)), rotaxis) * vertics[tr_i + 1] + path[i];
 
             vertics[tr_i + 2] = new Vector3(-size / 1.414f, -size / 1.414f, 0);
-            rotaxis = Vector3.Cross(vertics[tr_i + 2], towardNextPath);
+            rotaxis = Vector3.Cross(vertics[tr_i + 2], towardNextPath).normalized;
             vertics[tr_i + 2] = Quaternion.AngleAxis(-(90f -Vector3.Angle(vertics[tr_i+2], towardNextPath)), rotaxis) * vertics[tr_i + 2] + path[i];
 
             vertics[tr_i + 3] = new Vector3(-size / 1.414f, size / 1.414f, 0);
-            rotaxis = Vector3.Cross(vertics[tr_i + 3], towardNextPath);
+            rotaxis = Vector3.Cross(vertics[tr_i + 3], towardNextPath).normalized;
             vertics[tr_i + 3] = Quaternion.AngleAxis(-(90f - Vector3.Angle(vertics[tr_i+3], towardNextPath)), rotaxis) * vertics[tr_i + 3] + path[i];
 
 
