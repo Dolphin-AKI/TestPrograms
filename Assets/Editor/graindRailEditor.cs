@@ -8,6 +8,7 @@ public class graindRailEditor : Editor {
 
 	// Use this for initialization
 	void Start () {
+
 	
 	}
 	
@@ -31,6 +32,7 @@ public class graindRailEditor : Editor {
     {
         graindRail gr = target as graindRail;
 
+        gr.size = EditorGUILayout.FloatField("size", gr.size);
         gr.editPathNum = EditorGUILayout.IntField("edit", gr.editPathNum);
 
         List<Vector3> path = gr.path;
