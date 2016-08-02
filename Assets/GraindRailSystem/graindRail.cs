@@ -62,13 +62,13 @@ public class graindRail : MonoBehaviour {
                 for (int j = 0; j < 3; j++)
                 {
                     tr_i = i * 4 + j;
-                    triangles[_trianglecnt++] = tr_i;
+                    triangles[_trianglecnt++] = tr_i;                    
+                    triangles[_trianglecnt++] = tr_i + 1;
                     triangles[_trianglecnt++] = tr_i + 4;
-                    triangles[_trianglecnt++] = tr_i + 1;
 
-                    triangles[_trianglecnt++] = tr_i + 1;
-                    triangles[_trianglecnt++] = tr_i + 4;                    
+                    triangles[_trianglecnt++] = tr_i + 1;                                       
                     triangles[_trianglecnt++] = tr_i + 4 + 1;
+                    triangles[_trianglecnt++] = tr_i + 4;
 
 #if debug
                     Debug.Log(_trianglecnt);
@@ -76,12 +76,13 @@ public class graindRail : MonoBehaviour {
                 }
                     tr_i += 1;
                     triangles[_trianglecnt++] = tr_i;
+                    triangles[_trianglecnt++] = tr_i - 3;  
                     triangles[_trianglecnt++] = tr_i + 4;
-                    triangles[_trianglecnt++] = tr_i - 3;
+                    
 
-                    triangles[_trianglecnt++] = tr_i - 3;
-                    triangles[_trianglecnt++] = tr_i + 4;                    
+                    triangles[_trianglecnt++] = tr_i - 3;                                       
                     triangles[_trianglecnt++] = tr_i + 1;
+                    triangles[_trianglecnt++] = tr_i + 4;
             }
 
            
@@ -89,20 +90,20 @@ public class graindRail : MonoBehaviour {
 
         }
         //蓋、最後のほう
-        triangles[_trianglecnt++] = (path.Count - 1) * 4;
-        triangles[_trianglecnt++] = (path.Count - 1) * 4 + 1;
+        triangles[_trianglecnt++] = (path.Count - 1) * 4;        
         triangles[_trianglecnt++] = (path.Count - 1) * 4 + 3;
         triangles[_trianglecnt++] = (path.Count - 1) * 4 + 1;
+        triangles[_trianglecnt++] = (path.Count - 1) * 4 + 1;        
+        triangles[_trianglecnt++] = (path.Count - 1) * 4 + 3;
         triangles[_trianglecnt++] = (path.Count - 1) * 4 + 2;
-        triangles[_trianglecnt++] = (path.Count - 1) * 4 + 3;
 
         //蓋、最初のほう
-        triangles[_trianglecnt++] = 0;
-        triangles[_trianglecnt++] = 1;
+        triangles[_trianglecnt++] = 0;        
         triangles[_trianglecnt++] = 3;
         triangles[_trianglecnt++] = 1;
+        triangles[_trianglecnt++] = 1;        
+        triangles[_trianglecnt++] = 3;
         triangles[_trianglecnt++] = 2;
-        triangles[_trianglecnt++] = 3;
 
 
 
@@ -125,8 +126,8 @@ public class graindRail : MonoBehaviour {
 
         MeshCollider meshcollider = GetComponent<MeshCollider>();
         meshcollider.sharedMesh = mesh;
-        meshcollider.convex = true;
-        meshcollider.isTrigger = true;
+        //meshcollider.convex = true;
+        //meshcollider.isTrigger = true;
 
 
 
