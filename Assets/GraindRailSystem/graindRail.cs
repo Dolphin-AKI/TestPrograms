@@ -1,4 +1,4 @@
-﻿#define debug
+﻿
 
 using UnityEngine;
 using System.Collections.Generic;
@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshCollider))]
 public class graindRail : MonoBehaviour {
 
     public float size = 1f;
@@ -32,27 +33,28 @@ public class graindRail : MonoBehaviour {
         {
             int tr_i = i * 4;
 
+            //次の制御点への方向取得　（ない場合現制御点）
             Vector3 towardNextPath = path[i];
             if (i < path.Count - 1)
             {
                 towardNextPath = (path[i + 1] - path[i]).normalized;
             }
-            
-            vertics[tr_i] = new Vector3(size / 1.414f, size / 1.414f, 0);
-            Vector3 rotaxis = Vector3.Cross(vertics[tr_i], towardNextPath).normalized;
-            vertics[tr_i] = Quaternion.AngleAxis(-(90f - Vector3.Angle(vertics[tr_i],towardNextPath)), rotaxis) * vertics[tr_i]  + path[i];
+            //面法線を次のパスへ向ける回転軸と回転角度を取得
+            Vector3 rotaxis = Vector3.Cross(Vector3.back, towardNextPath).normalized;
+            float rotAngle = Vector3.Angle(Vector3.back, towardNextPath);
+
+
+            vertics[tr_i] = new Vector3(size / 1.414f, size / 1.414f, 0);            
+            vertics[tr_i] = Quaternion.AngleAxis(rotAngle, rotaxis) * vertics[tr_i]  + path[i];
 
             vertics[tr_i + 1] = new Vector3(size / 1.414f, -size / 1.414f, 0);
-            rotaxis = Vector3.Cross(vertics[tr_i + 1], towardNextPath).normalized;
-            vertics[tr_i + 1] = Quaternion.AngleAxis(-(90f - Vector3.Angle(vertics[tr_i+1], towardNextPath)), rotaxis) * vertics[tr_i + 1] + path[i];
+            vertics[tr_i + 1] = Quaternion.AngleAxis(rotAngle, rotaxis) * vertics[tr_i + 1] + path[i];
 
             vertics[tr_i + 2] = new Vector3(-size / 1.414f, -size / 1.414f, 0);
-            rotaxis = Vector3.Cross(vertics[tr_i + 2], towardNextPath).normalized;
-            vertics[tr_i + 2] = Quaternion.AngleAxis(-(90f -Vector3.Angle(vertics[tr_i+2], towardNextPath)), rotaxis) * vertics[tr_i + 2] + path[i];
+            vertics[tr_i + 2] = Quaternion.AngleAxis(rotAngle, rotaxis) * vertics[tr_i + 2] + path[i];
 
             vertics[tr_i + 3] = new Vector3(-size / 1.414f, size / 1.414f, 0);
-            rotaxis = Vector3.Cross(vertics[tr_i + 3], towardNextPath).normalized;
-            vertics[tr_i + 3] = Quaternion.AngleAxis(-(90f - Vector3.Angle(vertics[tr_i+3], towardNextPath)), rotaxis) * vertics[tr_i + 3] + path[i];
+            vertics[tr_i + 3] = Quaternion.AngleAxis(rotAngle, rotaxis) * vertics[tr_i + 3] + path[i];
 
 
             if (i < path.Count - 1)
@@ -121,6 +123,12 @@ public class graindRail : MonoBehaviour {
 #endif
 
 
+        MeshCollider meshcollider = GetComponent<MeshCollider>();
+        meshcollider.sharedMesh = mesh;
+        meshcollider.convex = true;
+        meshcollider.isTrigger = true;
+
+
 
     }
 	
@@ -143,7 +151,11 @@ public class graindRail : MonoBehaviour {
             Gizmos.DrawSphere(pos, 1);
         }
 
-        for(int i = 0; i < path.Count-1; i++)
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawSphere(path[editPathNum], 1);
+
+
+        for (int i = 0; i < path.Count-1; i++)
         {
             Gizmos.color = Color.magenta;
             Gizmos.DrawLine(path[i], path[i + 1]);

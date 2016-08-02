@@ -30,10 +30,34 @@ public class graindRailEditor : Editor {
     private bool pathListFolding = false;
     public override void OnInspectorGUI()
     {
+        
+
         graindRail gr = target as graindRail;
 
         gr.size = EditorGUILayout.FloatField("size", gr.size);
-        gr.editPathNum = EditorGUILayout.IntField("edit", gr.editPathNum);
+
+        EditorGUI.BeginChangeCheck();
+        gr.editPathNum = EditorGUILayout.IntSlider("edit",gr.editPathNum,0,gr.path.Count - 1);
+        if(gr.editPathNum >= gr.path.Count)
+        {
+            gr.editPathNum = gr.path.Count - 1;
+        }
+
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Before", GUILayout.Width(60f)))
+        {
+            gr.editPathNum--;
+            
+
+        }
+        if (GUILayout.Button("Next", GUILayout.Width(60f)))
+        {
+            gr.editPathNum++;
+            
+            
+        }
+
+        EditorGUILayout.EndHorizontal();
 
         List<Vector3> path = gr.path;
         int plen = path.Count;
@@ -43,23 +67,38 @@ public class graindRailEditor : Editor {
             for(int i = 0; i < plen; i++)
             {
                 path[i] = EditorGUILayout.Vector3Field(i.ToString(), path[i]);
-            }
-
-            EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("ADD", GUILayout.Width(50f)))
-            {
-                Undo.RecordObject(gr, "add path");
-                gr.path.Add(Vector3.zero);
-            }
-            if (GUILayout.Button("Remove", GUILayout.Width(70f)))
-            {
-                Undo.RecordObject(gr, "remove path");
-                gr.path.RemoveAt(gr.editPathNum);
-            }
-            EditorGUILayout.EndHorizontal();
+            }            
         }
 
-        
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("ADD", GUILayout.Width(50f)))
+        {
+            Undo.RecordObject(gr, "add path");
+            gr.path.Insert(gr.editPathNum, gr.path[gr.editPathNum]);
+        }
+        if (GUILayout.Button("Remove", GUILayout.Width(70f)))
+        {
+            Undo.RecordObject(gr, "remove path");
+            gr.path.RemoveAt(gr.editPathNum);
+        }
+        EditorGUILayout.EndHorizontal();
+
+
+
+        if (gr.editPathNum >= gr.path.Count)
+        {
+            gr.editPathNum = gr.path.Count - 1;
+        }
+        else if (gr.editPathNum < 0)
+        {
+            gr.editPathNum = 0;
+        }
+
+        if (EditorGUI.EndChangeCheck())
+        {
+            SceneView.RepaintAll();
+        }
+
     }
     
 }
