@@ -9,10 +9,18 @@ using System.Collections.Generic;
 [RequireComponent(typeof(MeshCollider))]
 public class graindRail : MonoBehaviour {
 
+    //レールの大きさ
     public float size = 1f;
+
+    //レールパスの容量
     public int pathLength;
     public List<Vector3> path;
     public int editPathNum;
+
+    //一方通行
+    public bool oneway = false;
+    public bool owReverse = false;
+
 
 
 
@@ -142,6 +150,94 @@ public class graindRail : MonoBehaviour {
     {
         
     }
+
+    /// <summary>
+    /// 最寄りのパスを取得
+    /// </summary>
+    /// 
+    public int NearPath(Vector3 pos)
+    {
+        int indx = 0;
+        float mindist = Mathf.Infinity;
+        for(int i = 0; i < path.Count; i++)
+        {
+            if(Mathf.Abs((path[i]-pos).magnitude) < mindist)
+            {
+                indx = i;
+                mindist = Mathf.Abs((path[i] - pos).magnitude);
+            }
+        }
+
+        return indx;
+    }
+
+    /// <summary>
+    /// レールの上りか下りを判定
+    /// </summary>
+    /// <param name="pathIndex">Nearpath()で取得したレールパスインデックス</param>
+    /// <param name="fwd">自機のforward</param>
+    /// <returns>上り：false　下り:true</returns>
+    public bool RailForward(int pathIndex , Vector3 fwd)
+    {
+        bool reverse;
+
+        if (oneway)
+        {
+            return owReverse;
+        }
+
+
+        if(pathIndex == 0)
+        {
+            reverse = false;
+        }
+        else if(pathIndex == path.Count - 1)
+        {
+            reverse = true;
+        }
+        else
+        {
+            Vector3 downRail = (path[pathIndex - 1] - path[pathIndex]).normalized;
+            Vector3 upRail = (path[pathIndex + 1] - path[pathIndex]).normalized;
+
+            if(Vector3.Dot(fwd,downRail) >= Vector3.Dot(fwd, upRail))
+            {
+                reverse = true;
+            }
+            else
+            {
+                reverse = false;
+            }
+        }
+
+        return reverse;
+
+        
+    } 
+
+
+    /// <summary>
+    /// 次のノード座標を返します
+    /// </summary>
+    /// <param name="currentNodeIndex">現在のノード</param>
+    /// <param name="reverse">逆行かどうか</param>
+    /// <returns>次のノードのポジションベクトル</returns>
+    public Vector3 getNextNodePosition(int currentNodeIndex , bool reverse)
+    {
+        int nextindex;
+
+        if (reverse)
+        {
+            nextindex = currentNodeIndex - 1;
+        }
+        else
+        {
+            nextindex = currentNodeIndex + 1;
+        }
+
+        return path[nextindex];
+    }
+
 
     private void OnDrawGizmos()
     {

@@ -83,6 +83,11 @@ public class graindRailEditor : Editor {
         }
         EditorGUILayout.EndHorizontal();
 
+        if(gr.oneway = EditorGUILayout.Toggle("OneWay",gr.oneway))
+        {
+            gr.owReverse = EditorGUILayout.Toggle("Is Reverse", gr.owReverse);
+        }
+
 
 
         if (gr.editPathNum >= gr.path.Count)
