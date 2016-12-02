@@ -74,6 +74,9 @@ Shader "Hidden/SonarFX"
 				w = (l - wm) / _SonarWaveParams.z;
 			}
 
+			//ソナー末端での拡散
+			w *= _SonarWaveParams.y;
+
             // Get modulo (w % params.z / params.z)
             //w /= _SonarWaveParams.z;
             //w = w - floor(w);

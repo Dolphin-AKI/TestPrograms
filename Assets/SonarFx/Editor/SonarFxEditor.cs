@@ -82,7 +82,7 @@ public class SonarFxEditor : Editor
         EditorGUILayout.PropertyField(propWaveColor, new GUIContent("Color"));
         //EditorGUILayout.PropertyField(propWaveAmplitude, new GUIContent("Amplitude"));
         //EditorGUILayout.PropertyField(propWaveExponent, new GUIContent("Exponent"));
-        EditorGUILayout.PropertyField(propWaveRemnant, new GUIContent("Interval"));
+        EditorGUILayout.PropertyField(propWaveRemnant, new GUIContent("Remnant"));
         EditorGUILayout.PropertyField(propWaveSpeed, new GUIContent("Speed"));
         EditorGUILayout.PropertyField(propSonarLength, new GUIContent("Length"));
         EditorGUI.indentLevel--;

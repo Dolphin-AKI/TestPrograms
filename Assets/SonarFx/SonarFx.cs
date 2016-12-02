@@ -127,10 +127,22 @@ public class SonarFx : MonoBehaviour
 
         if( (_sonarTime * _waveSpeed) - _waveRemnant > _sonarLength)
         {
-            Shader.SetGlobalFloat(sonarTimeID, 0f);
+            _waveExponent -= Time.deltaTime;
+
+            if(_waveExponent > 0)
+            {
+
+            }
+            else
+            {
+                _waveExponent = 0;
+                Shader.SetGlobalFloat(sonarTimeID, 0f);
+            }
+            
         }
         else
         {
+            _waveExponent = 1f;
             Shader.SetGlobalFloat(sonarTimeID, _sonarTime);
         }
         
