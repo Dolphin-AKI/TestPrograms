@@ -89,7 +89,7 @@ public class SonarFx : MonoBehaviour
     int addColorID;
     int sonarTimeID;
 
-    float _sonarTime = 0;
+    float _sonarTime = Mathf.Infinity;
 
     void Awake()
     {
