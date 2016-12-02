@@ -20,6 +20,14 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
+
+
+
+// SonorFX_Burst
+//
+// 英語はいいや個人だし
+// 改造して任意にソナーをうてるようにした
+// _waveAmplitude , _waveExponent 未使用
 using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
@@ -47,19 +55,19 @@ public class SonarFx : MonoBehaviour
     public Color waveColor { get { return _waveColor; } set { _waveColor = value; } }
 
     // Wave color amplitude
-    [SerializeField] float _waveAmplitude = 2.0f;
+    [SerializeField] float _waveAmplitude = 0.0f;
     public float waveAmplitude { get { return _waveAmplitude; } set { _waveAmplitude = value; } }
 
     // Exponent for wave color
-    [SerializeField] float _waveExponent = 22.0f;
+    [SerializeField] float _waveExponent = 0.0f;
     public float waveExponent { get { return _waveExponent; } set { _waveExponent = value; } }
 
     // Interval between waves
-    [SerializeField] float _waveInterval = 20.0f;
-    public float waveInterval { get { return _waveInterval; } set { _waveInterval = value; } }
+    [SerializeField] float _waveRemnant = 80.0f;
+    public float waveInterval { get { return _waveRemnant; } set { _waveRemnant = value; } }
 
     // Wave speed
-    [SerializeField] float _waveSpeed = 10.0f;
+    [SerializeField] float _waveSpeed = 20.0f;
     public float waveSpeed { get { return _waveSpeed; } set { _waveSpeed = value; } }
 
     // Additional color (emission)
@@ -117,14 +125,22 @@ public class SonarFx : MonoBehaviour
             _sonarTime = 0;
         }
 
+        if( (_sonarTime * _waveSpeed) - _waveRemnant > _sonarLength)
+        {
+            Shader.SetGlobalFloat(sonarTimeID, 0f);
+        }
+        else
+        {
+            Shader.SetGlobalFloat(sonarTimeID, _sonarTime);
+        }
         
-        Shader.SetGlobalFloat(sonarTimeID, _sonarTime);
+        
 
         _sonarTime += Time.deltaTime;
 
         //
 
-        var param = new Vector4(_waveAmplitude, _waveExponent, _waveInterval, _waveSpeed);
+        var param = new Vector4(_waveAmplitude, _waveExponent, _waveRemnant, _waveSpeed);
         Shader.SetGlobalVector(waveParamsID, param);
                
 

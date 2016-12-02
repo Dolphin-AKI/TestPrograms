@@ -50,7 +50,7 @@ Shader "Hidden/SonarFX"
 
         float3 _SonarBaseColor;
         float3 _SonarWaveColor;
-        float4 _SonarWaveParams; // Amp, Exp, Interval, Speed
+        float4 _SonarWaveParams; // Amp, Exp, Remnant, Speed
         float3 _SonarWaveVector;
         float3 _SonarAddColor;
 		float _SonarTime;
@@ -58,33 +58,36 @@ Shader "Hidden/SonarFX"
         void surf(Input IN, inout SurfaceOutput o)
         {
 #ifdef SONAR_DIRECTIONAL
-            float w = dot(IN.worldPos, _SonarWaveVector);
+            float l = dot(IN.worldPos, _SonarWaveVector);
 #else
-            float w = length(IN.worldPos - _SonarWaveVector);
+            float l = length(IN.worldPos - _SonarWaveVector);
 #endif
 
-            // Moving wave.
-            w -= _SonarTime * _SonarWaveParams.w;
+			// sonar position
+			float wl = _SonarTime * _SonarWaveParams.w;
+			float wm = _SonarTime * _SonarWaveParams.w - _SonarWaveParams.z;
+
+			// color weight
+			float w = 0;
+
+			if (wl > l && wm < l) {
+				w = (l - wm) / _SonarWaveParams.z;
+			}
 
             // Get modulo (w % params.z / params.z)
-            w /= _SonarWaveParams.z;
+            //w /= _SonarWaveParams.z;
             //w = w - floor(w);
 
-			if (w > 1) {
-				w = 0;
-			}
-			else if (w < 0) {
-				w = 0;
-			}
+			
 
 
 
             // Make the gradient steeper.
-            float p = _SonarWaveParams.y;
+            //float p = _SonarWaveParams.y;
             //w = (pow(w, p) + pow(1 - w, p * 4)) * 0.5;
 
             // Amplify.
-            w *= _SonarWaveParams.x;
+            //w *= _SonarWaveParams.x;
 
             // Apply to the surface.
             o.Albedo = _SonarBaseColor * w;

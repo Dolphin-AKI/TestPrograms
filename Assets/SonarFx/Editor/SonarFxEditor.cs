@@ -33,7 +33,7 @@ public class SonarFxEditor : Editor
     SerializedProperty propWaveColor;
     SerializedProperty propWaveAmplitude;
     SerializedProperty propWaveExponent;
-    SerializedProperty propWaveInterval;
+    SerializedProperty propWaveRemnant;
     SerializedProperty propWaveSpeed;
     SerializedProperty propAddColor;
     SerializedProperty propSonarLength;
@@ -47,7 +47,7 @@ public class SonarFxEditor : Editor
         propWaveColor     = serializedObject.FindProperty("_waveColor");
         propWaveAmplitude = serializedObject.FindProperty("_waveAmplitude");
         propWaveExponent  = serializedObject.FindProperty("_waveExponent");
-        propWaveInterval  = serializedObject.FindProperty("_waveInterval");
+        propWaveRemnant  = serializedObject.FindProperty("_waveRemnant");
         propWaveSpeed     = serializedObject.FindProperty("_waveSpeed");
         propAddColor      = serializedObject.FindProperty("_addColor");
         propSonarLength = serializedObject.FindProperty("_sonarLength");
@@ -80,9 +80,9 @@ public class SonarFxEditor : Editor
         EditorGUILayout.LabelField("Wave Parameters");
         EditorGUI.indentLevel++;
         EditorGUILayout.PropertyField(propWaveColor, new GUIContent("Color"));
-        EditorGUILayout.PropertyField(propWaveAmplitude, new GUIContent("Amplitude"));
-        EditorGUILayout.PropertyField(propWaveExponent, new GUIContent("Exponent"));
-        EditorGUILayout.PropertyField(propWaveInterval, new GUIContent("Interval"));
+        //EditorGUILayout.PropertyField(propWaveAmplitude, new GUIContent("Amplitude"));
+        //EditorGUILayout.PropertyField(propWaveExponent, new GUIContent("Exponent"));
+        EditorGUILayout.PropertyField(propWaveRemnant, new GUIContent("Interval"));
         EditorGUILayout.PropertyField(propWaveSpeed, new GUIContent("Speed"));
         EditorGUILayout.PropertyField(propSonarLength, new GUIContent("Length"));
         EditorGUI.indentLevel--;
