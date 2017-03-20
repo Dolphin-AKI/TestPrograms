@@ -16,6 +16,7 @@ public class ObjectiveSonor : MonoBehaviour {
     public float smoothness;
     public float metalic;
 
+    [SerializeField]
     private float _glowtime = 1.5f;
     public float GlowTime { get { return _glowtime; } set { _glowtime = value; } }
 
@@ -23,8 +24,9 @@ public class ObjectiveSonor : MonoBehaviour {
 
     private float _amplitude = 0;
 
-    [SerializeField]
-    Shader shader;
+    private Renderer _render;
+
+    public Shader _objectsonarShader;
 
     //shader properties
     int ColorID;
@@ -35,6 +37,9 @@ public class ObjectiveSonor : MonoBehaviour {
 
     private void Awake()
     {
+        _render = this.gameObject.GetComponent<Renderer>();
+        _render.material.shader = _objectsonarShader;
+
         ColorID = Shader.PropertyToID("_Color");
         SmoothnessID = Shader.PropertyToID("_Glossiness");
         MetalicID = Shader.PropertyToID("_Metallic");
@@ -48,9 +53,9 @@ public class ObjectiveSonor : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        Shader.SetGlobalColor(ColorID, color);
-        Shader.SetGlobalFloat(SmoothnessID, smoothness);
-        Shader.SetGlobalFloat(MetalicID, metalic);
+        _render.material.SetColor(ColorID, color);
+        _render.material.SetFloat(SmoothnessID, smoothness);
+        _render.material.SetFloat(MetalicID, metalic);
 
 
         if (Input.GetKeyDown("s"))
@@ -62,9 +67,9 @@ public class ObjectiveSonor : MonoBehaviour {
         if(timer < _glowtime)
         {
 
-            _amplitude = Mathf.Cos( timer / _glowtime * Mathf.PI / 2);
+            _amplitude = Mathf.Cos( timer / _glowtime * Mathf.PI / 2) / 2;
             
-            Shader.SetGlobalFloat(GlowID, _amplitude);
+            _render.material.SetFloat(GlowID, _amplitude);
 
             timer += Time.deltaTime;
         }
